@@ -172,7 +172,7 @@ export const tutorialsList: Tutorial[] = [
     tool: "Quick Research",
     category: "Investigación & Análisis",
     description: "Aprende a utilizar el módulo de investigación de Quick para explorar fuentes, sintetizar hallazgos y generar reportes estructurados con respaldo de IA dentro del ecosistema Quick.",
-    youtubeId: "",
+    youtubeId: "3kNx6BezPok",
     googleDocsUrl: "https://drive.google.com/file/d/1xKC_1ZJIUZiMX4xB0V39hhi2KYmHImrz/view?usp=sharing",
     badge: "Quick",
     keyCommands: [
