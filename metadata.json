@@ -1,0 +1,6 @@
+{
+  "name": "EXPLORERS - Level 01: Discover",
+  "description": "Plataforma educativa e interactiva de Alfabetización Digital e Ingeniería de Prompts con IA para educadores e investigadores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

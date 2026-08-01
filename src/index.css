@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Graduate", "Rockwell", "Arvo", "Roboto Slab", Georgia, serif;
+  --font-college: "Graduate", "Arvo", serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #1f2937;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading, .font-college {
+  font-family: "Graduate", "Arvo", "Roboto Slab", serif;
+  letter-spacing: -0.01em;
+}
+
