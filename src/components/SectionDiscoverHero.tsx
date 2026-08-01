@@ -17,20 +17,19 @@ export const SectionDiscoverHero: React.FC<HeroProps> = ({ onNavigateSection, co
         </h1>
       </div>
 
-      {/* Main Hero Banner Container - Image representing AI & Education */}
-      <div className="w-full rounded-2xl overflow-hidden flex justify-center items-center bg-white shadow-xs p-1 border border-gray-100 select-none">
-        <img
-          src={new URL('../assets/images/explorers_banner.png', import.meta.url).href}
-          alt="EXPLORERS Ecosistema de Innovación Educativa"
-          width={1183}
-          height={624}
-          className="w-full h-auto object-contain rounded-2xl max-h-[550px] select-none pointer-events-none"
-          referrerPolicy="no-referrer"
-          draggable={false}
-          onError={(e) => {
-            e.currentTarget.src = `${import.meta.env.BASE_URL}explorers_banner.png`;
-          }}
-        />
+      {/* Main Hero Banner Container - YouTube Video */}
+      <div className="w-full rounded-2xl overflow-hidden bg-white shadow-xs p-1 border border-gray-100">
+        <div className="w-full max-w-[978px] aspect-video mx-auto rounded-2xl overflow-hidden">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/rRkWEGD7Rco?si=hu8lnrdpr2d12Cmw"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
       </div>
 
       {/* Level Roadmap Grid Coursera Style */}
