@@ -22,6 +22,8 @@ export const SectionDiscoverHero: React.FC<HeroProps> = ({ onNavigateSection, co
         <img
           src={new URL('../assets/images/explorers_banner.png', import.meta.url).href}
           alt="EXPLORERS Ecosistema de Innovación Educativa"
+          width={1183}
+          height={624}
           className="w-full h-auto object-contain rounded-2xl max-h-[550px] select-none pointer-events-none"
           referrerPolicy="no-referrer"
           draggable={false}
