@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitecto Maestro de Prompts</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --stone-50:  #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
+  --stone-900: #1c1917;
+  --terra-500: #cb6b4d;
+  --terra-600: #b0573c;
+  --sage-500:  #8b9a8b;
+  --sage-800:  #4a574a;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--stone-50);
+  color: var(--stone-800);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+button { font-family: inherit; cursor: pointer; }
+
+/* ── Blob decorativos del header ─────────────────────────── */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.2;
+  filter: blur(64px);
+  pointer-events: none;
+}
+.blob-terra { width: 24rem; height: 24rem; background: var(--terra-500); top: -50%; right: -10%; }
+.blob-sage  { width: 18rem; height: 18rem; background: var(--sage-500);  bottom: -20%; left: -10%; }
+
+/* ── Contenedor centrado ─────────────────────────────────── */
+.container { max-width: 72rem; margin: 0 auto; }
+
+/* ── Grid 2 columnas ─────────────────────────────────────── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+.grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .grid-2x2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Flex fila responsive ────────────────────────────────── */
+.flex-row-md {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .flex-row-md { flex-direction: row; }
+  .flex-row-md .col-1-3 { width: 33.333%; }
+  .flex-row-md .col-2-3 { width: 66.667%; }
+}
+
+/* ── Botones de pilar ────────────────────────────────────── */
+.pillar-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  text-align: left;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--stone-200);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  transition: all .3s ease;
+  color: var(--stone-800);
+}
+.pillar-btn:hover { border-color: var(--terra-500); }
+.pillar-btn.active {
+  background: var(--stone-900);
+  color: var(--stone-50);
+  border-color: var(--stone-900);
+  transform: scale(1.02);
+}
+.pillar-btn .btn-sub { color: var(--stone-500); font-size: .875rem; margin-top: .25rem; }
+.pillar-btn.active .btn-sub { color: var(--stone-400); }
+.pillar-stack > * + * { margin-top: 1rem; }
+
+/* ── Panel de pilar activo ───────────────────────────────── */
+.pillar-panel {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(245,245,244,.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(214,211,209,.5);
+  position: sticky;
+  top: 2rem;
+}
+.pillar-panel__header {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--stone-900);
+  padding: 2rem 2rem 1.5rem;
+}
+.pillar-panel__header .label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--terra-500); margin-bottom: .25rem;
+}
+.pillar-panel__header .title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; color: #fff; line-height: 1.3;
+}
+.pillar-panel__desc {
+  padding: 1.5rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid var(--stone-100);
+}
+.pillar-panel__desc .section-label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--sage-500); margin-bottom: .75rem;
+}
+.pillar-panel__example {
+  padding: 1.5rem 2rem;
+  background: #fff5f2;
+}
+.pillar-panel__example .section-label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--terra-500); margin-bottom: .75rem;
+}
+.pillar-panel__pips {
+  display: flex; align-items: center; gap: .5rem;
+  padding: 1.25rem 2rem;
+  background: var(--stone-50);
+  border-top: 1px solid var(--stone-100);
+}
+.pip-label {
+  font-size: .75rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--stone-400); margin-right: .5rem;
+}
+.pip {
+  width: .75rem; height: .75rem; border-radius: 9999px;
+  background: var(--stone-300);
+  transition: all .3s ease;
+}
+
+/* ── Tarjetas de ruta ────────────────────────────────────── */
+.route-card {
+  padding: 1.5rem; border-radius: 0.75rem;
+  border: 2px solid var(--stone-100);
+  background: var(--stone-50);
+  cursor: pointer; transition: all .3s ease;
+}
+.route-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,.1); }
+.route-card.active-route {
+  border-color: var(--terra-500);
+  background: #fffaf9;
+  box-shadow: 0 4px 12px rgba(203,107,77,.15);
+}
+.route-card.mega {
+  border-color: #f3ddd5;
+  background: #fff5f2;
+}
+
+/* ── Panel de ruta activa ────────────────────────────────── */
+.route-panel {
+  border-radius: 1rem; overflow: hidden;
+  border: 1px solid var(--stone-200);
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  position: sticky; top: 2rem;
+}
+.route-panel__header {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--sage-800);
+  padding: 2rem 2rem 1.5rem;
+}
+.route-panel__header .label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: #a8bfa8; margin-bottom: .25rem;
+}
+.route-panel__header .title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; color: #fff; line-height: 1.3;
+}
+.route-panel__desc {
+  padding: 1.5rem 2rem; background: #fff;
+  border-bottom: 1px solid var(--stone-100);
+}
+.route-panel__desc .section-label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--sage-500); margin-bottom: .75rem;
+}
+.route-panel__snippet {
+  padding: 1.5rem 2rem; background: #f4f7f4;
+}
+.route-panel__snippet .section-label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--terra-500); margin-bottom: .75rem;
+}
+.code-box {
+  background: #fff; border-radius: .5rem; border: 1px solid #dce6dc;
+  padding: 1rem; overflow-x: auto;
+}
+.code-box code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .875rem; color: var(--stone-700);
+  white-space: pre-wrap; display: block;
+}
+
+/* ── Timeline ────────────────────────────────────────────── */
+.timeline-track {
+  position: relative;
+  border-left: 4px solid var(--stone-200);
+  margin-left: 1rem;
+  padding: 1rem 0 1rem 2rem;
+  display: flex; flex-direction: column; gap: 3rem;
+}
+.timeline-node {
+  position: absolute; left: -0.625rem;
+  width: 1.25rem; height: 1.25rem; border-radius: 9999px;
+  border: 4px solid var(--stone-50);
+  background: var(--stone-300);
+  cursor: pointer; transition: all .3s ease;
+}
+.timeline-node.active-node {
+  background: var(--terra-500);
+  border-color: var(--terra-500);
+  transform: scale(1.1);
+}
+.timeline-btn {
+  text-align: left; font-weight: 700; font-size: 1.125rem;
+  color: var(--stone-500); background: none; border: none;
+  cursor: pointer; transition: color .15s ease;
+}
+.timeline-btn:hover, .timeline-btn.active { color: var(--terra-600); }
+
+/* ── Panel de fase ───────────────────────────────────────── */
+.phase-panel {
+  background: var(--stone-900); color: var(--stone-50);
+  padding: 2rem; border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,.1);
+  min-height: 350px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.phase-badge {
+  display: inline-block; width: max-content;
+  background: var(--terra-500); color: #fff;
+  font-size: .75rem; font-weight: 700;
+  padding: .25rem .75rem; border-radius: 9999px;
+  text-transform: uppercase; letter-spacing: .05em;
+  margin-bottom: 1rem;
+}
+.phase-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.875rem; color: #fff; margin-bottom: 1rem;
+}
+.phase-desc {
+  font-size: 1.125rem; color: var(--stone-300);
+  line-height: 1.625; margin-bottom: 1.5rem;
+}
+.phase-terminal {
+  background: var(--stone-800); padding: 1rem; border-radius: .5rem;
+  border: 1px solid var(--stone-700);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .875rem; color: var(--sage-500);
+}
+
+/* ── Section header ──────────────────────────────────────── */
+.section-head { margin-bottom: 2rem; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.25rem; color: var(--stone-900);
+  display: inline-block; padding-bottom: .5rem;
+  margin-bottom: 1rem;
+}
+.section-title.terra  { border-bottom: 2px solid var(--terra-500); }
+.section-title.sage   { border-bottom: 2px solid var(--sage-500); }
+.section-title.dark   { border-bottom: 2px solid var(--stone-900); }
+.section-intro {
+  font-size: 1.125rem; color: var(--stone-600); line-height: 1.625;
+}
+
+/* ── Responsive padding helpers ──────────────────────────── */
+.px-resp { padding-left: 1.5rem; padding-right: 1.5rem; }
+@media (min-width: 768px)  { .px-resp { padding-left: 3rem; padding-right: 3rem; } }
+@media (min-width: 1024px) { .px-resp { padding-left: 6rem; padding-right: 6rem; } }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="px-resp" style="background:var(--stone-900);color:var(--stone-50);padding-top:4rem;padding-bottom:4rem;border-bottom-left-radius:1.5rem;border-bottom-right-radius:1.5rem;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);position:relative;overflow:hidden;">
+  <div class="blob blob-terra"></div>
+  <div class="blob blob-sage"></div>
+  <div class="container" style="position:relative;z-index:10;">
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(2.25rem,5vw,3.75rem);line-height:1.2;margin-bottom:1rem;">
+      Arquitecto Maestro de Prompts
+    </h1>
+    <p style="font-size:clamp(1rem,2.5vw,1.5rem);font-weight:300;color:var(--stone-300);max-width:48rem;line-height:1.625;">
+      Una plataforma interactiva para dominar la ingeniería de prompts y la gobernanza de Modelos de Lenguaje de Gran Escala (LLM). Explora el marco estratégico para transformar intenciones en instrucciones de alta precisión.
+    </p>
+  </div>
+</header>
+
+<!-- ══ MAIN ════════════════════════════════════════════════ -->
+<main class="container px-resp" style="padding-top:3rem;padding-bottom:3rem;">
+
+  <!-- ── 1. LOS 5 PILARES ──────────────────────────────── -->
+  <section style="margin-bottom:6rem;">
+    <div class="section-head">
+      <h2 class="section-title terra">Los 5 Pilares Estructurales</h2>
+      <p class="section-intro">
+        Esta sección desglosa la taxonomía fundamental de un prompt perfecto. Haz clic en cada pilar para ver su definición y un <strong>ejemplo práctico</strong> de cómo implementarlo.
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <!-- botones -->
+      <div class="pillar-stack">
+        <button onclick="updatePillar('persona')" class="pillar-btn active" id="btn-persona">
+          <span style="font-size:1.875rem;">🎭</span>
+          <div>
+            <div style="font-size:1.25rem;font-weight:700;">1. Persona (Rol)</div>
+            <div class="btn-sub">¿Quién debe ser la IA? Define la especialidad y el tono.</div>
+          </div>
+        </button>
+        <button onclick="updatePillar('background')" class="pillar-btn" id="btn-background">
+          <span style="font-size:1.875rem;">🌍</span>
+          <div>
+            <div style="font-size:1.25rem;font-weight:700;">2. Background (Contexto)</div>
+            <div class="btn-sub">¿Qué información previa debe conocer? Define el objetivo.</div>
+          </div>
+        </button>
+        <button onclick="updatePillar('task')" class="pillar-btn" id="btn-task">
+          <span style="font-size:1.875rem;">🎯</span>
+          <div>
+            <div style="font-size:1.25rem;font-weight:700;">3. Task (Tarea)</div>
+            <div class="btn-sub">¿Cuál es la acción central? Utiliza verbos imperativos.</div>
+          </div>
+        </button>
+        <button onclick="updatePillar('constraints')" class="pillar-btn" id="btn-constraints">
+          <span style="font-size:1.875rem;">🚧</span>
+          <div>
+            <div style="font-size:1.25rem;font-weight:700;">4. Constraints (Restricciones)</div>
+            <div class="btn-sub">¿Qué tiene prohibido hacer? Define rieles de seguridad.</div>
+          </div>
+        </button>
+        <button onclick="updatePillar('output')" class="pillar-btn" id="btn-output">
+          <span style="font-size:1.875rem;">📦</span>
+          <div>
+            <div style="font-size:1.25rem;font-weight:700;">5. Output (Formato)</div>
+            <div class="btn-sub">¿Cómo debe entregar el resultado? Estructura final.</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- panel -->
+      <div class="pillar-panel">
+        <div class="pillar-panel__header">
+          <span id="pillar-icon" style="font-size:3rem;">🎭</span>
+          <div>
+            <div class="label">Pilar Activo</div>
+            <div id="chart-title" class="title">1. Persona (Rol)</div>
+          </div>
+        </div>
+        <div class="pillar-panel__desc">
+          <div class="section-label">¿Qué es?</div>
+          <p id="pillar-detail-text" style="font-size:1rem;color:var(--stone-700);line-height:1.625;">
+            Actúa como un experto senior en el dominio solicitado. Define la especialidad, el tono (formal/creativo) y los años de experiencia para filtrar el conocimiento de la IA.
+          </p>
+        </div>
+        <div class="pillar-panel__example">
+          <div class="section-label">✦ Ejemplo Práctico</div>
+          <p id="pillar-example-text" style="font-size:1rem;color:var(--stone-800);font-weight:500;font-style:italic;line-height:1.625;">
+            "Actúa como un experto en productividad y gestión del tiempo para crear un calendario de lanzamientos trimestral."
+          </p>
+        </div>
+        <div class="pillar-panel__pips">
+          <span class="pip-label">Pilares:</span>
+          <div id="pip-persona"     class="pip" style="background:var(--terra-500);transform:scale(1.4);"></div>
+          <div id="pip-background"  class="pip"></div>
+          <div id="pip-task"        class="pip"></div>
+          <div id="pip-constraints" class="pip"></div>
+          <div id="pip-output"      class="pip"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. RUTAS DE DIAGNÓSTICO ───────────────────────── -->
+  <section style="margin-bottom:6rem;background:#fff;padding:3rem 2rem;border-radius:1.5rem;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid var(--stone-200);">
+    <div class="section-head">
+      <h2 class="section-title sage">Rutas de Diagnóstico y Diseño</h2>
+      <p class="section-intro">
+        Haz clic en cada tipo de prompt para ver cuándo usarlo y su ejemplo práctico de implementación.
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <!-- panel de ejemplo -->
+      <div class="route-panel">
+        <div class="route-panel__header">
+          <span id="route-icon" style="font-size:3rem;">⚡</span>
+          <div>
+            <div class="label">Ruta Activa</div>
+            <div id="route-detail-title" class="title">Prompt Atómico (Zero-shot)</div>
+          </div>
+        </div>
+        <div class="route-panel__desc">
+          <div class="section-label">¿Cuándo usarlo?</div>
+          <p id="route-detail-desc" style="font-size:1rem;color:var(--stone-700);line-height:1.625;">
+            Usado para tareas rápidas donde el modelo ya tiene suficiente conocimiento implícito.
+          </p>
+        </div>
+        <div class="route-panel__snippet">
+          <div class="section-label">✦ Snippet de Ejemplo</div>
+          <div class="code-box">
+            <code id="route-detail-code"></code>
+          </div>
+        </div>
+      </div>
+
+      <!-- tarjetas -->
+      <div class="grid-2x2" style="align-content:start;">
+        <div onclick="updateRoute('atomic')"  class="route-card active-route" id="card-atomic">
+          <div style="font-size:1.5rem;margin-bottom:.5rem;">⚡</div>
+          <div style="font-size:1.125rem;font-weight:700;margin-bottom:.5rem;">Prompt Atómico</div>
+          <p style="font-size:.75rem;color:var(--stone-600);">Tareas simples y directas (Zero-shot).</p>
+        </div>
+        <div onclick="updateRoute('fewshot')" class="route-card" id="card-fewshot">
+          <div style="font-size:1.5rem;margin-bottom:.5rem;">📋</div>
+          <div style="font-size:1.125rem;font-weight:700;margin-bottom:.5rem;">Few-shot Prompt</div>
+          <p style="font-size:.75rem;color:var(--stone-600);">Dando ejemplos de estructura y estilo.</p>
+        </div>
+        <div onclick="updateRoute('cot')"     class="route-card" id="card-cot">
+          <div style="font-size:1.5rem;margin-bottom:.5rem;">🧠</div>
+          <div style="font-size:1.125rem;font-weight:700;margin-bottom:.5rem;">Cadena de Pensamiento</div>
+          <p style="font-size:.75rem;color:var(--stone-600);">Para lógica y razonamiento por pasos.</p>
+        </div>
+        <div onclick="updateRoute('mega')"    class="route-card mega" id="card-mega">
+          <div style="font-size:1.5rem;margin-bottom:.5rem;">🏛️</div>
+          <div style="font-size:1.125rem;font-weight:700;margin-bottom:.5rem;">Megaprompt</div>
+          <p style="font-size:.75rem;color:var(--terra-600);">Configuración sistémica para Proyectos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. PROTOCOLO ──────────────────────────────────── -->
+  <section style="margin-bottom:6rem;">
+    <div class="section-head">
+      <h2 class="section-title dark">El Protocolo de Interacción (5 Fases)</h2>
+      <p class="section-intro">
+        El Arquitecto opera bajo un proceso estrictamente iterativo y consultivo. Navega por la línea de tiempo para descubrir cómo evoluciona la construcción de un prompt.
+      </p>
+    </div>
+
+    <div class="flex-row-md">
+      <!-- timeline -->
+      <div class="col-1-3">
+        <div class="timeline-track">
+          <div class="timeline-node active-node" id="node-1" onclick="updateTimeline(1)" style="top:8%;"></div>
+          <button class="timeline-btn active" id="text-node-1" onclick="updateTimeline(1)">1. Descubrimiento</button>
+
+          <div class="timeline-node" id="node-2" onclick="updateTimeline(2)" style="top:28%;"></div>
+          <button class="timeline-btn" id="text-node-2" onclick="updateTimeline(2)">2. Diagnóstico</button>
+
+          <div class="timeline-node" id="node-3" onclick="updateTimeline(3)" style="top:48%;"></div>
+          <button class="timeline-btn" id="text-node-3" onclick="updateTimeline(3)">3. Extracción</button>
+
+          <div class="timeline-node" id="node-4" onclick="updateTimeline(4)" style="top:68%;"></div>
+          <button class="timeline-btn" id="text-node-4" onclick="updateTimeline(4)">4. Borrador</button>
+
+          <div class="timeline-node" id="node-5" onclick="updateTimeline(5)" style="top:88%;"></div>
+          <button class="timeline-btn" id="text-node-5" onclick="updateTimeline(5)">5. Refinamiento</button>
+        </div>
+      </div>
+
+      <!-- panel de fase -->
+      <div class="col-2-3">
+        <div class="phase-panel">
+          <div id="phase-badge" class="phase-badge">Inicio</div>
+          <h3 id="phase-title" class="phase-title">Fase 1: Descubrimiento de Intención</h3>
+          <p id="phase-desc" class="phase-desc">
+            El proceso siempre comienza interrogando al usuario para entender el propósito real.
+          </p>
+          <div id="phase-action" class="phase-terminal">
+            > Esperando respuesta del usuario para definir la ruta...
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer style="background:var(--stone-900);color:var(--stone-400);padding:2rem;text-align:center;margin-top:3rem;border-top:1px solid var(--stone-800);">
+  <p style="font-size:.875rem;">&copy; Sistema Interactivo: El Arquitecto Maestro de Prompts. Framework basado en la Taxonomía de los 5 Pilares.</p>
+</footer>
+
+<script>
+const pillarData = {
+  persona:     { icon:"🎭", title:"1. Persona (Rol)",               text:"Actúa como un experto senior en el dominio solicitado. Define la especialidad, el tono (formal/creativo) y los años de experiencia para filtrar el conocimiento de la IA.",    example:'"Actúa como un experto en productividad y gestión del tiempo para crear un calendario de lanzamientos trimestral."' },
+  background:  { icon:"🌍", title:"2. Background (Contexto)",       text:"Provee la información previa necesaria. Define el público meta, el escenario actual y por qué se está realizando la tarea.",                                                      example:'"El contexto es una startup de tecnología que lanzará su primera app móvil en 3 meses. El público son jóvenes profesionales."' },
+  task:        { icon:"🎯", title:"3. Task (Tarea)",                text:"La acción central. Debe ser una instrucción clara e imperativa. Define qué se espera obtener exactamente.",                                                                        example:'"Diseña un calendario editorial detallado para redes sociales que incluya fechas, temas, canales y copy sugerido."' },
+  constraints: { icon:"🚧", title:"4. Constraints (Restricciones)", text:"Los límites del prompt. Prohibiciones, reglas de estilo o elementos que no deben aparecer bajo ninguna circunstancia.",                                                            example:'"No uses jerga excesivamente técnica. El calendario no debe exceder las 4 publicaciones por semana por canal."' },
+  output:      { icon:"📦", title:"5. Output (Formato)",            text:"Cómo quieres recibir la información. Tablas, listas, código o un tono de voz específico en el texto.",                                                                           example:'"Entrega el calendario en una tabla de Markdown con columnas para: Día, Tema, Canal y Responsable."' }
+};
+
+const routeData = {
+  atomic:  { icon:"⚡",  title:"Prompt Atómico (Zero-shot)",  desc:"Usado para tareas rápidas donde el modelo ya tiene suficiente conocimiento implícito. No requiere ejemplos adicionales.",               code:"Petición: 'Resume este párrafo en 3 puntos clave.'\nSalida: [Resumen directo]" },
+  fewshot: { icon:"📋",  title:"Few-shot Prompting",          desc:"Doy ejemplos de cómo quiero el resultado para que el modelo identifique el patrón. Ideal para calendarios o formatos únicos.",          code:"Ejemplo 1: [Lunes: Reporte]       -> [Resultado X]\nEjemplo 2: [Martes: Analítica]   -> [Resultado Y]\nTarea:     [Miércoles: Lanzamiento] -> [La IA sigue el patrón]" },
+  cot:     { icon:"🧠",  title:"Chain-of-Thought",            desc:"Fuerza a la IA a razonar por pasos antes de dar la respuesta final. Ideal para planificación lógica compleja.",                         code:"Instrucción:\n  Paso 1: Evalúa la capacidad.\n  Paso 2: Prioriza tareas.\n  Paso 3: Asigna fechas al calendario." },
+  mega:    { icon:"🏛️", title:"Megaprompt Sistémico",         desc:"Una arquitectura que combina todos los pilares para configurar un agente especializado dentro de un Proyecto o Gem.",                   code:"[PERSONA] + [CONTEXT] + [TASK]\n+ [CONSTRAINTS] + [OUTPUT_SPECS]" }
+};
+
+const timelineData = {
+  1: { badge:"Inicio", title:"Fase 1: Descubrimiento", desc:"Pregunta al usuario por su objetivo real antes de proponer cualquier estructura.",                        action:"> ¿Qué tipo de calendario deseas crear?" },
+  2: { badge:"Lógica", title:"Fase 2: Diagnóstico",    desc:"Sugiere la ruta (Atómica, Few-shot, etc.) según la complejidad del calendario solicitado.",               action:"> Analizando si se requieren ejemplos previos para el formato..." },
+  3: { badge:"Diseño", title:"Fase 3: Extracción",     desc:"Cuestionario de pilares: Persona (Rol), Background, Tarea y Restricciones del calendario.",               action:"> Extrayendo variables de tiempo y recursos..." },
+  4: { badge:"Salida", title:"Fase 4: Borrador",       desc:"Presentación del prompt final estructurado listo para ejecutar.",                                          action:"> Generando bloque de código de alta precisión..." },
+  5: { badge:"Mejora", title:"Fase 5: Refinamiento",   desc:"¿El calendario es muy denso? Ajustamos las restricciones y el formato.",                                  action:"> Aplicando feedback iterativo..." }
+};
+
+const pillarOrder = ['persona','background','task','constraints','output'];
+
+function updatePillar(id) {
+  document.querySelectorAll('.pillar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + id).classList.add('active');
+
+  const info = pillarData[id];
+  document.getElementById('pillar-icon').innerText         = info.icon;
+  document.getElementById('chart-title').innerText         = info.title;
+  document.getElementById('pillar-detail-text').innerText  = info.text;
+  document.getElementById('pillar-example-text').innerText = info.example;
+
+  pillarOrder.forEach(p => {
+    const pip = document.getElementById('pip-' + p);
+    pip.style.backgroundColor = (p === id) ? 'var(--terra-500)' : 'var(--stone-300)';
+    pip.style.transform        = (p === id) ? 'scale(1.4)' : 'scale(1)';
+  });
+}
+
+function updateRoute(id) {
+  document.querySelectorAll('.route-card').forEach(c => c.classList.remove('active-route'));
+  document.getElementById('card-' + id).classList.add('active-route');
+
+  const d = routeData[id];
+  document.getElementById('route-icon').innerText          = d.icon;
+  document.getElementById('route-detail-title').innerText  = d.title;
+  document.getElementById('route-detail-desc').innerText   = d.desc;
+  document.getElementById('route-detail-code').innerText   = d.code;
+}
+
+function updateTimeline(n) {
+  document.querySelectorAll('.timeline-node').forEach(nd => nd.classList.remove('active-node'));
+  document.querySelectorAll('.timeline-btn').forEach(b  => b.classList.remove('active'));
+  document.getElementById('node-' + n).classList.add('active-node');
+  document.getElementById('text-node-' + n).classList.add('active');
+
+  const d = timelineData[n];
+  document.getElementById('phase-badge').innerText  = d.badge;
+  document.getElementById('phase-title').innerText  = d.title;
+  document.getElementById('phase-desc').innerText   = d.desc;
+  document.getElementById('phase-action').innerText = d.action;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updatePillar('persona');
+  updateRoute('atomic');
+  updateTimeline(1);
+});
+</script>
+</body>
+</html>
