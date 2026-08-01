@@ -153,7 +153,7 @@ export const SectionPromptEngineering: React.FC = () => {
             <span>Módulo Interactivo: Arquitecto Maestro de Prompts</span>
           </h3>
           <a
-            href="/interactive/arquitecto-maestro-prompts.html"
+            href={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs font-semibold text-[#0056D2] hover:underline"
@@ -162,7 +162,7 @@ export const SectionPromptEngineering: React.FC = () => {
           </a>
         </div>
         <iframe
-          src="/interactive/arquitecto-maestro-prompts.html"
+          src={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
           title="Arquitecto Maestro de Prompts"
           className="w-full border-0"
           style={{ height: "1500px" }}
