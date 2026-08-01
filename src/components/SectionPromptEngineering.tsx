@@ -1,5 +1,6 @@
 import React from "react";
 import { Terminal, BookOpen } from "lucide-react";
+import { PromptArchitectModule } from "./PromptArchitectModule";
 
 export const SectionPromptEngineering: React.FC = () => {
   return (
@@ -21,27 +22,15 @@ export const SectionPromptEngineering: React.FC = () => {
 
       {/* Interactive Learning Module: Arquitecto Maestro de Prompts */}
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xs">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <h3 className="text-base font-bold text-gray-900 flex items-center space-x-2">
             <BookOpen className="w-4 h-4 text-[#0056D2]" />
             <span>Actividad de Refuerzo: Arquitecto Maestro de Prompts</span>
           </h3>
-          <a
-            href={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-semibold text-[#0056D2] hover:underline"
-          >
-            Abrir en pantalla completa ↗
-          </a>
         </div>
-        <iframe
-          src={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
-          title="Arquitecto Maestro de Prompts"
-          className="w-full border-0"
-          style={{ height: "1500px" }}
-          loading="lazy"
-        />
+        <div className="p-6">
+          <PromptArchitectModule />
+        </div>
       </div>
     </section>
   );
