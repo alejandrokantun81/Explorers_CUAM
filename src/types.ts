@@ -28,15 +28,6 @@ export interface ActivityChallenge {
   }[];
 }
 
-export interface PromptEvaluation {
-  score: number;
-  structureQuality: "Excelente" | "Aceptable" | "Deficiente";
-  clarity: "Alta" | "Media" | "Baja";
-  strengths: string[];
-  improvements: string[];
-  optimizedPrompt: string;
-}
-
 export interface StudentSubmission {
   activityId: number;
   activityTitle: string;
