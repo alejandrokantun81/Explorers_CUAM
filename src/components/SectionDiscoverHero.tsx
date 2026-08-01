@@ -26,7 +26,7 @@ export const SectionDiscoverHero: React.FC<HeroProps> = ({ onNavigateSection, co
           referrerPolicy="no-referrer"
           draggable={false}
           onError={(e) => {
-            e.currentTarget.src = "/explorers_banner.png";
+            e.currentTarget.src = `${import.meta.env.BASE_URL}explorers_banner.png`;
           }}
         />
       </div>
