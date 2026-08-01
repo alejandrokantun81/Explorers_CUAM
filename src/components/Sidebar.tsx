@@ -52,14 +52,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       time: "45 min"
     },
     {
-      id: "sec-lab",
-      label: "Laboratorio Práctico",
-      badge: "5 Retos",
-      icon: TestTube,
-      type: "5 Evaluación",
-      time: "60 min"
-    },
-    {
       id: "sec-resources",
       label: "Recursos Didácticos",
       badge: "6 Recursos",

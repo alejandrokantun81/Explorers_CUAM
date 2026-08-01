@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileText, Download, Copy, Check, Sparkles, BookOpen, Layers, ExternalLink, Search, Filter, Bookmark, FolderArchive, ArrowRight, Video } from "lucide-react";
+import { FileText, Download, Copy, Check, FolderArchive, Video } from "lucide-react";
 
 interface Resource {
   id: string;
@@ -12,6 +12,8 @@ interface Resource {
   contentPrompt?: string;
   linkUrl?: string;
   buttonText?: string;
+  secondaryButtonText?: string;
+  secondaryLinkUrl?: string;
   isExternalLink?: boolean;
 }
 
@@ -24,8 +26,10 @@ const resourcesData: Resource[] = [
     format: "PDF",
     downloads: 948,
     tags: ["Workbook", "Libro de Trabajo", "Formación Docente"],
-    linkUrl: "https://docs.google.com",
-    buttonText: "Descargar Libro de Trabajo"
+    linkUrl: "https://docs.google.com/document/d/1sNY4lgsLNxJ5Z9K_xW4qCGHIeEXNGVm9pBFCukF3Etg/edit?usp=sharing",
+    buttonText: "Descargar Libro de Trabajo",
+    secondaryButtonText: "Materiales de Investigación",
+    secondaryLinkUrl: "https://drive.google.com/drive/folders/164UR9_Cbk2XqR_apoL8f-Z5_T0Jq9O-W?usp=sharing"
   },
   {
     id: "res-2",
@@ -35,28 +39,14 @@ const resourcesData: Resource[] = [
     format: "ACCESO VIRTUAL",
     downloads: 1240,
     tags: ["Clase Virtual", "Sesiones en Vivo", "Aula Digital"],
-    linkUrl: "https://meet.google.com",
+    linkUrl: "https://classroom.google.com/c/ODcxNDU3MzkzODA1?cjc=wu3azmsy",
     buttonText: "Acceder a la Clase Virtual",
     isExternalLink: true
   }
 ];
 
 export const SectionDidacticResources: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("Todas");
   const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const categories = ["Todas", "Workbook", "Clase Virtual", "Plantillas de Prompts", "Guías & Manuales", "Rúbricas de Evaluación", "Infografías & Decálogos"];
-
-  const filteredResources = resourcesData.filter(res => {
-    const matchesSearch = res.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      res.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      res.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesCategory = selectedCategory === "Todas" || res.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
 
   const handleCopyPrompt = (id: string, text?: string) => {
     if (!text) return;
@@ -82,42 +72,11 @@ export const SectionDidacticResources: React.FC = () => {
             Descarga plantillas editables, guías de implementación, rúbricas de evaluación e instrumentos pedagógicos diseñados para enriquecer tu práctica docente con Inteligencia Artificial.
           </p>
         </div>
-
-        {/* Filter and Search Bar */}
-        <div className="pt-2 flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
-            <input
-              type="text"
-              placeholder="Buscar recursos por título, palabra clave o etiqueta..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 bg-white text-gray-900 rounded-xl text-xs font-medium placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D6D20] shadow-2xs"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Categories Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
-              selectedCategory === cat
-                ? "bg-[#0F52BA] text-white shadow-xs"
-                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
       </div>
 
       {/* Resource Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredResources.map(res => (
+        {resourcesData.map(res => (
           <div
             key={res.id}
             className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 shadow-2xs hover:border-[#0F52BA] transition flex flex-col justify-between"
@@ -179,38 +138,44 @@ export const SectionDidacticResources: React.FC = () => {
             )}
 
             {/* Card Actions */}
-            <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+            <div className="pt-3 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <span className="text-[11px] text-gray-500 font-medium">
                 {res.downloads} {res.format === "ACCESO VIRTUAL" ? "accesos" : "descargas"}
               </span>
 
-              {res.format !== "PROMPT" && (
-                <a
-                  href={res.linkUrl || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#0F52BA] hover:bg-[#00419e] text-white text-xs font-bold rounded-lg transition shadow-2xs font-college"
-                >
-                  {res.isExternalLink ? (
-                    <Video className="w-3.5 h-3.5" />
-                  ) : (
-                    <Download className="w-3.5 h-3.5" />
-                  )}
-                  <span>{res.buttonText || `Descargar ${res.format}`}</span>
-                </a>
-              )}
+              <div className="flex flex-wrap items-center gap-2">
+                {res.secondaryButtonText && (
+                  <a
+                    href={res.secondaryLinkUrl || "#"}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#1D6D20] hover:bg-[#155218] text-white text-xs font-bold rounded-lg transition shadow-2xs font-college"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>{res.secondaryButtonText}</span>
+                  </a>
+                )}
+
+                {res.format !== "PROMPT" && (
+                  <a
+                    href={res.linkUrl || "#"}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#0F52BA] hover:bg-[#00419e] text-white text-xs font-bold rounded-lg transition shadow-2xs font-college"
+                  >
+                    {res.isExternalLink ? (
+                      <Video className="w-3.5 h-3.5" />
+                    ) : (
+                      <Download className="w-3.5 h-3.5" />
+                    )}
+                    <span>{res.buttonText || `Descargar ${res.format}`}</span>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         ))}
       </div>
-
-      {filteredResources.length === 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center space-y-2">
-          <BookOpen className="w-8 h-8 text-gray-400 mx-auto" />
-          <p className="font-bold text-sm text-gray-700">No se encontraron recursos</p>
-          <p className="text-xs text-gray-500">Prueba con otra búsqueda o selecciona una categoría diferente.</p>
-        </div>
-      )}
 
     </section>
   );
