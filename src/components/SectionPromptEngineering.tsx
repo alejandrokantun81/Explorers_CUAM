@@ -112,62 +112,43 @@ export const SectionPromptEngineering: React.FC = () => {
         </p>
       </div>
 
-      {/* Conceptual Cards Coursera Style */}
+      {/* Conceptual Cards Coursera Style - Pillar Pattern */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2 shadow-2xs">
-          <div className="flex items-center space-x-2 text-[#0056D2] font-bold text-xs">
-            <Layers className="w-4 h-4" />
-            <span>1. Definición de Prompt</span>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-[#0056D2] transition space-y-3 shadow-2xs">
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-50 text-[#0056D2] flex items-center justify-center font-bold shrink-0">
+              <Layers className="w-5 h-5" />
+            </div>
+            <h4 className="text-sm font-bold text-gray-900">1. Definición de Prompt</h4>
           </div>
           <p className="text-xs text-gray-600 leading-relaxed">
             Especificación de contexto, intencionalidad y condicionantes dada a la IA para respuestas precisas sin alucinaciones.
           </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2 shadow-2xs">
-          <div className="flex items-center space-x-2 text-[#0056D2] font-bold text-xs">
-            <Wand2 className="w-4 h-4" />
-            <span>2. Fórmula R + T + C</span>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-[#0056D2] transition space-y-3 shadow-2xs">
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-50 text-[#0056D2] flex items-center justify-center font-bold shrink-0">
+              <Wand2 className="w-5 h-5" />
+            </div>
+            <h4 className="text-sm font-bold text-gray-900">2. Fórmula R + T + C</h4>
           </div>
           <p className="text-xs text-gray-600 leading-relaxed">
             <strong>Rol</strong> (quién actúa), <strong>Tarea</strong> (acción a ejecutar) y <strong>Contexto</strong> (audiencia y marco regulatorio).
           </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2 shadow-2xs">
-          <div className="flex items-center space-x-2 text-emerald-700 font-bold text-xs">
-            <BookOpen className="w-4 h-4" />
-            <span>3. Actividad Intro: Planeación</span>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-[#0056D2] transition space-y-3 shadow-2xs">
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shrink-0">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <h4 className="text-sm font-bold text-gray-900">3. Actividad Intro: Planeación</h4>
           </div>
           <p className="text-xs text-gray-600 leading-relaxed">
             Construye abajo una planeación académica interactiva mediante el editor y evalúa su efectividad con Gemini AI.
           </p>
         </div>
-      </div>
-
-      {/* Interactive Learning Module: Arquitecto Maestro de Prompts */}
-      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xs">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h3 className="text-base font-bold text-gray-900 flex items-center space-x-2">
-            <BookOpen className="w-4 h-4 text-[#0056D2]" />
-            <span>Módulo Interactivo: Arquitecto Maestro de Prompts</span>
-          </h3>
-          <a
-            href={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-semibold text-[#0056D2] hover:underline"
-          >
-            Abrir en pantalla completa ↗
-          </a>
-        </div>
-        <iframe
-          src={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
-          title="Arquitecto Maestro de Prompts"
-          className="w-full border-0"
-          style={{ height: "1500px" }}
-          loading="lazy"
-        />
       </div>
 
       {/* Interactive Builder Workbench */}
@@ -387,6 +368,31 @@ export const SectionPromptEngineering: React.FC = () => {
 
         </div>
 
+      </div>
+
+      {/* Interactive Learning Module: Arquitecto Maestro de Prompts */}
+      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xs">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <h3 className="text-base font-bold text-gray-900 flex items-center space-x-2">
+            <BookOpen className="w-4 h-4 text-[#0056D2]" />
+            <span>Actividad de Refuerzo: Arquitecto Maestro de Prompts</span>
+          </h3>
+          <a
+            href={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-semibold text-[#0056D2] hover:underline"
+          >
+            Abrir en pantalla completa ↗
+          </a>
+        </div>
+        <iframe
+          src={`${import.meta.env.BASE_URL}interactive/arquitecto-maestro-prompts.html`}
+          title="Arquitecto Maestro de Prompts"
+          className="w-full border-0"
+          style={{ height: "1500px" }}
+          loading="lazy"
+        />
       </div>
     </section>
   );
