@@ -165,5 +165,26 @@ export const tutorialsList: Tutorial[] = [
       "Define el esquema de datos en formato JSON para la interpretación por Gemini.",
       "Guarda y prueba el conector realizando una consulta de diagnóstico."
     ]
+  },
+  {
+    id: "tut-investigacion-quick",
+    title: "Investigación en Quick",
+    tool: "Quick Research",
+    category: "Investigación & Análisis",
+    description: "Aprende a utilizar el módulo de investigación de Quick para explorar fuentes, sintetizar hallazgos y generar reportes estructurados con respaldo de IA dentro del ecosistema Quick.",
+    youtubeId: "",
+    googleDocsUrl: "https://drive.google.com/file/d/1xKC_1ZJIUZiMX4xB0V39hhi2KYmHImrz/view?usp=sharing",
+    badge: "Quick",
+    keyCommands: [
+      "Iniciar Nueva Investigación",
+      "Definir Alcance y Fuentes",
+      "Exportar Reporte de Hallazgos"
+    ],
+    steps: [
+      "Accede a la pestaña Investigación dentro de Quick y selecciona 'Nueva Investigación'.",
+      "Define el tema, alcance y fuentes preferidas (internas, web o documentos cargados).",
+      "Revisa los hallazgos sintetizados con citas y ajusta el enfoque si es necesario.",
+      "Exporta el reporte final en el formato requerido para tu equipo o institución."
+    ]
   }
 ];

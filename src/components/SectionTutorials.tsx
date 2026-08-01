@@ -63,7 +63,7 @@ export const SectionTutorials: React.FC = () => {
                   {tut.category}
                 </span>
                 <span className="text-[10px] font-semibold text-gray-500">
-                  Vídeo • {tut.badge}
+                  {tut.youtubeId ? `Vídeo • ${tut.badge}` : `Próximamente • ${tut.badge}`}
                 </span>
               </div>
 
@@ -87,7 +87,7 @@ export const SectionTutorials: React.FC = () => {
                 className="flex-1 flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg bg-[#0056D2] hover:bg-[#00419e] text-white text-xs font-bold transition"
               >
                 <Play className="w-3.5 h-3.5 fill-white" />
-                <span>Ver Vídeo</span>
+                <span>{tut.youtubeId ? "Ver Vídeo" : "Ver Detalles"}</span>
               </button>
 
               <a
@@ -128,16 +128,23 @@ export const SectionTutorials: React.FC = () => {
               <p className="text-xs text-gray-600 mt-1">{selectedTutorial.description}</p>
             </div>
 
-            {/* Video Player Frame / Embed */}
-            <div className="aspect-video bg-black rounded-xl overflow-hidden border border-gray-300 relative flex items-center justify-center shadow-md">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${selectedTutorial.youtubeId}?autoplay=0&rel=0`}
-                title={selectedTutorial.title}
-                className="w-full h-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
+            {selectedTutorial.youtubeId ? (
+              <div className="aspect-video bg-black rounded-xl overflow-hidden border border-gray-300 relative flex items-center justify-center shadow-md">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${selectedTutorial.youtubeId}?autoplay=0&rel=0`}
+                  title={selectedTutorial.title}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            ) : (
+              <div className="aspect-video bg-gray-50 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-2 shadow-md">
+                <Video className="w-8 h-8 text-gray-300" />
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Video Próximamente</p>
+                <p className="text-[11px] text-gray-400">Mientras tanto, consulta la guía completa abajo</p>
+              </div>
+            )}
 
 
 
