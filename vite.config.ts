@@ -5,7 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: '/Explorers_CUAM/',
+    base: '/Explorers_CUAM_v2/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
