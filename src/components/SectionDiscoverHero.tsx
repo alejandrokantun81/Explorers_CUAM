@@ -22,7 +22,7 @@ export const SectionDiscoverHero: React.FC<HeroProps> = ({ onNavigateSection, co
         <div className="w-full max-w-[978px] aspect-video mx-auto rounded-2xl overflow-hidden">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/rRkWEGD7Rco?si=hu8lnrdpr2d12Cmw"
+            src="https://www.youtube.com/embed/OsyR2j2kl08?si=qdnCE3og9TAIypZ_"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
