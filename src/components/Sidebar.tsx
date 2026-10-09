@@ -172,13 +172,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Desktop Coursera Left Sidebar */}
       <aside
-        className={`hidden lg:flex flex-col justify-between bg-[#0F52BA] text-white border-r border-[#082866] sticky top-0 h-screen transition-all duration-200 z-30 shadow-md ${
+        className={`hidden lg:flex flex-col justify-between bg-[#7A1F3D] text-white border-r border-[#4A1024] sticky top-0 h-screen transition-all duration-200 z-30 shadow-md ${
           collapsed ? "w-20" : "w-80 xl:w-88 shrink-0"
         }`}
       >
         <div>
           {/* Header */}
-          <div className="p-4 sm:p-5 border-b border-blue-700/60">
+          <div className="p-4 sm:p-5 border-b border-white/20">
             {!collapsed ? (
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
@@ -187,7 +187,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </h1>
                   <button
                     onClick={() => setCollapsed(true)}
-                    className="text-blue-200 hover:text-white p-1.5 rounded hover:bg-white/10 transition shrink-0 ml-1"
+                    className="text-rose-200 hover:text-white p-1.5 rounded hover:bg-white/10 transition shrink-0 ml-1"
                     title="Colapsar menú"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -210,9 +210,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Collapsible Material de Curso Menu */}
           <div className="p-4 space-y-5 overflow-y-auto max-h-[calc(100vh-180px)]">
             {!collapsed && (
-              <div className="flex items-center justify-between text-xs font-bold text-blue-100 px-2 cursor-pointer hover:text-white" onClick={() => setMaterialExpanded(!materialExpanded)}>
-                <span className="uppercase tracking-wider text-xs sm:text-sm text-blue-200 font-extrabold font-college">Material de Curso</span>
-                <ChevronLeft className={`w-5 h-5 text-blue-200 transition-transform ${materialExpanded ? "-rotate-90" : "rotate-0"}`} />
+              <div className="flex items-center justify-between text-xs font-bold text-rose-100 px-2 cursor-pointer hover:text-white" onClick={() => setMaterialExpanded(!materialExpanded)}>
+                <span className="uppercase tracking-wider text-xs sm:text-sm text-rose-200 font-extrabold font-college">Material de Curso</span>
+                <ChevronLeft className={`w-5 h-5 text-rose-200 transition-transform ${materialExpanded ? "-rotate-90" : "rotate-0"}`} />
               </div>
             )}
 
@@ -228,8 +228,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       title={collapsed ? item.label : undefined}
                       className={`w-full flex items-start text-left rounded-xl p-3 sm:p-3.5 transition-all text-sm font-medium group relative ${
                         isActive
-                          ? "bg-white text-[#0F52BA] font-bold shadow-md scale-[1.01]"
-                          : "text-blue-100 hover:bg-white/10 hover:text-white"
+                          ? "bg-white text-[#7A1F3D] font-bold shadow-md scale-[1.01]"
+                          : "text-rose-100 hover:bg-white/10 hover:text-white"
                       }`}
                     >
                       {/* Radio/Check indicator */}
@@ -237,18 +237,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {isCompleted ? (
                           <CheckCircle2 className={`w-5 h-5 ${isActive ? "text-emerald-600" : "text-emerald-300"}`} />
                         ) : isActive ? (
-                          <div className="w-5 h-5 rounded-full border-2 border-[#0F52BA] flex items-center justify-center bg-white">
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#0F52BA]"></div>
+                          <div className="w-5 h-5 rounded-full border-2 border-[#7A1F3D] flex items-center justify-center bg-white">
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#7A1F3D]"></div>
                           </div>
                         ) : (
-                          <Circle className="w-5 h-5 text-blue-300 group-hover:text-white" />
+                          <Circle className="w-5 h-5 text-rose-300 group-hover:text-white" />
                         )}
                       </div>
 
                       {!collapsed && (
                         <div className="ml-3 flex-1 min-w-0">
                           <p className="truncate text-sm sm:text-base font-bold leading-tight">{item.label}</p>
-                          <p className={`text-xs font-medium mt-1 ${isActive ? "text-blue-900" : "text-blue-200"}`}>
+                          <p className={`text-xs font-medium mt-1 ${isActive ? "text-[#4A1024]" : "text-rose-200"}`}>
                             {item.type} • {item.time}
                           </p>
                         </div>
